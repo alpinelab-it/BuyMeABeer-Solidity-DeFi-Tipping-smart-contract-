@@ -15,7 +15,7 @@ async function printBalances(addresses) {
   }
 }
 
-// Logs the memos stored on-chain from coffee purchases.
+// Logs the memos stored on-chain from beer purchases.
 async function printMemos(memos) {
   for (const memo of memos) {
     const timestamp = memo.timestamp;
@@ -38,16 +38,16 @@ async function main() {
   await buyMeABeer.deployed();
   console.log("BuyMeABeer deployed to:", buyMeABeer.address);
 
-  // Check balances before the coffee purchase.
+  // Check balances before the beer purchase.
   const addresses = [owner.address, tipper.address, buyMeABeer.address];
   console.log("== start ==");
   await printBalances(addresses);
 
-  // Buy the owner a few coffees.
+  // Buy the owner a few beers.
   const tip = {value: hre.ethers.utils.parseEther("1")};
-  await buyMeABeer.connect(tipper).buyCoffee("Carolina", "You're the best!", tip);
-  await buyMeABeer.connect(tipper2).buyCoffee("Vitto", "Amazing teacher", tip);
-  await buyMeABeer.connect(tipper3).buyCoffee("Kay", "I love my Proof of Knowledge", tip);
+  await buyMeABeer.connect(tipper).buyBeer("Carolina", "You're the best!", tip);
+  await buyMeABeer.connect(tipper2).buyBeer("Vitto", "Amazing teacher", tip);
+  await buyMeABeer.connect(tipper3).buyBeer("Kay", "I love my Proof of Knowledge", tip);
 
   // Check balances after the coffee purchase.
   console.log("== bought coffee ==");

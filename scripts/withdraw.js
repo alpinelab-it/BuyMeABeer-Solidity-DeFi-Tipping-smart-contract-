@@ -1,7 +1,10 @@
 // scripts/withdraw.js
+require("dotenv").config();
 
 const hre = require("hardhat");
 const abi = require("../artifacts/contracts/BuyMeABeer.sol/BuyMeABeer.json");
+
+
 
 async function getBalance(provider, address) {
   const balanceBigInt = await provider.getBalance(address);
@@ -10,7 +13,7 @@ async function getBalance(provider, address) {
 
 async function main() {
   // Get the contract that has been deployed to Goerli.
-  const contractAddress="0x186dC04dAEe62992D125c009fA6214d1523684C6";
+  const contractAddress= process.env.CONTRACT_ADDRESS;
   const contractABI = abi.abi;
 
   // Get the node connection and wallet connection.
@@ -21,17 +24,17 @@ async function main() {
   const signer = new hre.ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
   // Instantiate connected contract.
-  const buyMeACoffee = new hre.ethers.Contract(contractAddress, contractABI, signer);
+  const buyMeABeer = new hre.ethers.Contract(contractAddress, contractABI, signer);
 
   // Check starting balances.
   console.log("current balance of owner: ", await getBalance(provider, signer.address), "ETH");
-  const contractBalance = await getBalance(provider, buyMeACoffee.address);
-  console.log("current balance of contract: ", await getBalance(provider, buyMeACoffee.address), "ETH");
+  const contractBalance = await getBalance(provider, buyMeABeer.address);
+  console.log("current balance of contract: ", await getBalance(provider, buyMeABeer.address), "ETH");
 
   // Withdraw funds if there are funds to withdraw.
   if (contractBalance !== "0.0") {
     console.log("withdrawing funds..")
-    const withdrawTxn = await buyMeACoffee.withdrawTips();
+    const withdrawTxn = await buyMeABeer.withdrawTips();
     await withdrawTxn.wait();
   } else {
     console.log("no funds to withdraw!");
